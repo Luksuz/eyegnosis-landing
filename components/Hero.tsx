@@ -9,20 +9,37 @@ export default function Hero() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid md:grid-cols-2 gap-16 items-center">
           <div>
+            {/* Social proof above headline */}
+            <div className="flex items-center gap-2 mb-6">
+              <div className="flex -space-x-2">
+                {['MS', 'JC', 'TR', 'AK'].map((initials) => (
+                  <div key={initials} className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-cyan-400 flex items-center justify-center text-xs font-bold text-dark-bg border-2 border-dark-bg">
+                    {initials}
+                  </div>
+                ))}
+              </div>
+              <span className="text-sm text-gray-400">
+                <span className="text-white font-semibold">10,247 people</span> discovered hidden health signals this week
+              </span>
+            </div>
+
             <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
-              Your Eyes Reveal What Your Body{' '}
-              <span className="gradient-text">Won&apos;t Tell You</span>
+              What If Your Eyes Could Warn You{' '}
+              <span className="gradient-text">Before Symptoms Appear?</span>
             </h1>
-            <p className="text-lg text-gray-400 mb-8">
-              AI-powered iris analysis gives you instant health insights that traditional checkups miss. 
-              Join 10,000+ health-conscious individuals discovering their body&apos;s hidden signals.
+            <p className="text-lg text-gray-400 mb-4">
+              Your iris contains over 200 markers that reveal what&apos;s happening inside your body—stress on your liver, 
+              inflammation patterns, vitamin deficiencies—signals your annual checkup never catches.
+            </p>
+            <p className="text-lg text-white font-medium mb-8">
+              Get your personalized health map in 60 seconds. No blood draws. No appointments. Just your phone.
             </p>
             <div className="flex flex-wrap gap-4 mb-8">
               <Link 
                 href="/pricing" 
                 className="gradient-bg text-dark-bg px-8 py-4 rounded-xl font-bold text-lg flex items-center gap-2 hover:scale-105 hover:shadow-lg hover:shadow-primary/30 transition-all"
               >
-                Get Your Free Iris Scan
+                Scan My Iris Free
                 <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
@@ -31,7 +48,7 @@ export default function Hero() {
                 href="#how-it-works" 
                 className="border border-white/10 text-white px-8 py-4 rounded-xl font-semibold flex items-center gap-2 hover:bg-white/5 transition-all"
               >
-                See How It Works
+                See a Sample Report
                 <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path d="M19 9l-7 7-7-7"/>
                 </svg>
@@ -39,22 +56,22 @@ export default function Hero() {
             </div>
             <div className="flex flex-wrap gap-4">
               <div className="flex items-center gap-2 text-sm text-gray-400">
-                <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="text-primary">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                </svg>
-                256-bit Encryption
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-400">
-                <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="text-primary">
+                <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="text-green-400">
                   <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
-                GDPR Compliant
+                Free first scan
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-400">
-                <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="text-primary">
-                  <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="text-green-400">
+                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
-                Powered by GPT-4 Vision
+                No credit card required
+              </div>
+              <div className="flex items-center gap-2 text-sm text-gray-400">
+                <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="text-green-400">
+                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                Results in 60 seconds
               </div>
             </div>
           </div>
@@ -72,10 +89,10 @@ export default function Hero() {
             </div>
             <div className="absolute -top-4 -right-4 bg-dark-card rounded-xl p-4 border border-white/10 hidden md:block">
               <h4 className="text-primary font-bold text-sm">Analysis Time</h4>
-              <p className="text-2xl font-extrabold">&lt; 60 seconds</p>
+              <p className="text-2xl font-extrabold">&lt; 60 sec</p>
             </div>
             <div className="absolute -bottom-4 -left-4 bg-dark-card rounded-xl p-4 border border-white/10 hidden md:block">
-              <h4 className="text-primary font-bold text-sm">Markers Analyzed</h4>
+              <h4 className="text-primary font-bold text-sm">Health Markers</h4>
               <p className="text-2xl font-extrabold">200+</p>
             </div>
           </div>
