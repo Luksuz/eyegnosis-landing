@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
-import { stripe, PRICES } from '@/lib/stripe'
+import { stripe, PRICES, PRICE_TO_PLAN_ID } from '@/lib/stripe'
 
 export async function POST(request: Request) {
   try {
@@ -47,7 +47,16 @@ export async function POST(request: Request) {
     }
 
     // Get the actual Stripe price ID
-    const stripePriceId = priceId === 'MONTHLY' ? PRICES.MONTHLY : PRICES.YEARLY
+    const priceKey = priceId as keyof typeof PRICES
+    const stripePriceId = PRICES[priceKey]
+    const planId = PRICE_TO_PLAN_ID[priceKey] || 'pro'
+
+    if (!stripePriceId) {
+      return NextResponse.json(
+        { error: 'Invalid price ID' },
+        { status: 400 }
+      )
+    }
 
     // Check if user already has a Stripe customer ID
     const { data: profile } = await supabase
@@ -91,11 +100,13 @@ export async function POST(request: Request) {
       metadata: {
         supabase_user_id: user.id,
         plan: priceId,
+        plan_id: planId,
       },
       subscription_data: {
         metadata: {
           supabase_user_id: user.id,
           plan: priceId,
+          plan_id: planId,
         },
       },
       allow_promotion_codes: true,
