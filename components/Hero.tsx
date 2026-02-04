@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function Hero() {
   return (
@@ -77,21 +78,25 @@ export default function Hero() {
           </div>
           
           <div className="relative">
-            <div className="bg-gradient-to-br from-dark-card to-dark-bg rounded-3xl p-10 text-center">
-              <div className="w-48 h-48 mx-auto mb-6 bg-gradient-radial from-primary to-transparent rounded-full flex items-center justify-center">
-                <svg width="80" height="80" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="text-dark-bg">
-                  <circle cx="12" cy="12" r="3"/>
-                  <circle cx="12" cy="12" r="10"/>
-                  <path d="M12 2v4M12 18v4M2 12h4M18 12h4"/>
-                </svg>
-              </div>
-              <p className="text-gray-400">AI-Powered Iris Analysis</p>
+            {/* Hero Image */}
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-primary/20">
+              <Image
+                src="/images/hero.png"
+                alt="AI-Powered Iris Analysis - Phone scanning an eye with health data visualization"
+                width={600}
+                height={400}
+                className="w-full h-auto"
+                priority
+              />
+              {/* Subtle overlay gradient for better text contrast if needed */}
+              <div className="absolute inset-0 bg-gradient-to-t from-dark-bg/20 to-transparent pointer-events-none" />
             </div>
-            <div className="absolute -top-4 -right-4 bg-dark-card rounded-xl p-4 border border-white/10 hidden md:block">
+            {/* Floating stats cards */}
+            <div className="absolute -top-4 -right-4 bg-dark-card/90 backdrop-blur-sm rounded-xl p-4 border border-white/10 hidden md:block shadow-lg">
               <h4 className="text-primary font-bold text-sm">Analysis Time</h4>
               <p className="text-2xl font-extrabold">&lt; 60 sec</p>
             </div>
-            <div className="absolute -bottom-4 -left-4 bg-dark-card rounded-xl p-4 border border-white/10 hidden md:block">
+            <div className="absolute -bottom-4 -left-4 bg-dark-card/90 backdrop-blur-sm rounded-xl p-4 border border-white/10 hidden md:block shadow-lg">
               <h4 className="text-primary font-bold text-sm">Health Markers</h4>
               <p className="text-2xl font-extrabold">200+</p>
             </div>
