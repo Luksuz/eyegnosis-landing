@@ -3,18 +3,50 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase/client'
+
+interface PlanDetails {
+  planId: string
+  planName: string
+  billingInterval: string
+  credits: number
+  customerEmail?: string
+}
 
 export default function SuccessContent() {
   const searchParams = useSearchParams()
   const sessionId = searchParams.get('session_id')
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
+  const [planDetails, setPlanDetails] = useState<PlanDetails | null>(null)
 
   useEffect(() => {
-    if (sessionId) {
-      setStatus('success')
-    } else {
-      setStatus('error')
+    async function verifySession() {
+      if (!sessionId) {
+        setStatus('error')
+        return
+      }
+
+      // Refresh the Supabase session to ensure auth is synced after Stripe redirect
+      const supabase = createClient()
+      await supabase.auth.getSession()
+
+      try {
+        const response = await fetch(`/api/verify-session?session_id=${sessionId}`)
+        const data = await response.json()
+
+        if (data.success) {
+          setPlanDetails(data)
+          setStatus('success')
+        } else {
+          setStatus('error')
+        }
+      } catch (error) {
+        console.error('Error verifying session:', error)
+        setStatus('error')
+      }
     }
+
+    verifySession()
   }, [sessionId])
 
   if (status === 'loading') {
@@ -26,6 +58,7 @@ export default function SuccessContent() {
             <div className="h-8 bg-dark-card rounded mb-4" />
             <div className="h-4 bg-dark-card rounded w-2/3 mx-auto" />
           </div>
+          <p className="text-gray-400 mt-4">Verifying your payment...</p>
         </div>
       </section>
     )
@@ -40,14 +73,14 @@ export default function SuccessContent() {
               <path d="M6 18L18 6M6 6l12 12"/>
             </svg>
           </div>
-          
+
           <h1 className="text-4xl font-extrabold mb-4">Something went wrong</h1>
           <p className="text-xl text-gray-400 mb-8">
             We couldn&apos;t verify your payment. Please contact support if you were charged.
           </p>
 
-          <Link 
-            href="/pricing" 
+          <Link
+            href="/pricing"
             className="inline-block gradient-bg text-dark-bg px-8 py-4 rounded-xl font-bold hover:shadow-lg hover:shadow-primary/30 transition-all"
           >
             Try Again
@@ -57,6 +90,10 @@ export default function SuccessContent() {
     )
   }
 
+  const planTitle = planDetails?.planName || 'Pro'
+  const credits = planDetails?.credits || 30
+  const billingText = planDetails?.billingInterval === 'yearly' ? 'yearly' : 'monthly'
+
   return (
     <section className="pt-32 pb-24">
       <div className="max-w-2xl mx-auto px-6 text-center">
@@ -65,10 +102,13 @@ export default function SuccessContent() {
             <path d="M5 13l4 4L19 7"/>
           </svg>
         </div>
-        
-        <h1 className="text-4xl font-extrabold mb-4">Welcome to Zero Blind Pro!</h1>
-        <p className="text-xl text-gray-400 mb-8">
-          Your subscription is now active. You have unlimited access to all premium features.
+
+        <h1 className="text-4xl font-extrabold mb-4">Welcome to Zero Blind {planTitle}!</h1>
+        <p className="text-xl text-gray-400 mb-2">
+          Your {billingText} subscription is now active.
+        </p>
+        <p className="text-lg text-primary font-semibold mb-8">
+          You now have {credits} scans per month!
         </p>
 
         <div className="bg-dark-card rounded-2xl p-8 mb-8 text-left">
@@ -78,7 +118,7 @@ export default function SuccessContent() {
               <span className="w-6 h-6 gradient-bg rounded-full flex items-center justify-center text-dark-bg font-bold text-sm flex-shrink-0">1</span>
               <div>
                 <p className="font-semibold">View your account</p>
-                <p className="text-gray-400 text-sm">Check your subscription status and profile</p>
+                <p className="text-gray-400 text-sm">Check your subscription status and credits</p>
               </div>
             </li>
             <li className="flex items-start gap-3">
@@ -99,8 +139,8 @@ export default function SuccessContent() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link 
-            href="/account" 
+          <Link
+            href="/account"
             className="gradient-bg text-dark-bg px-8 py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-primary/30 transition-all"
           >
             Go to My Account
@@ -108,8 +148,8 @@ export default function SuccessContent() {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mt-4">
-          <Link 
-            href="https://apps.apple.com" 
+          <Link
+            href="https://apps.apple.com"
             className="bg-white/10 text-white px-6 py-3 rounded-xl font-semibold flex items-center justify-center gap-2 hover:bg-white/20 transition-all"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -117,8 +157,8 @@ export default function SuccessContent() {
             </svg>
             Download for iOS
           </Link>
-          <Link 
-            href="https://play.google.com" 
+          <Link
+            href="https://play.google.com"
             className="bg-white/10 text-white px-6 py-3 rounded-xl font-semibold flex items-center justify-center gap-2 hover:bg-white/20 transition-all"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
